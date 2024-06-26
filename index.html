@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="light">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>React Toastify : The complete guide.</title>
+      <meta name="HandheldFriendly" content="True">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="manifest" href="/blog/assets/manifest.webmanifest?v=63f27459c3">
+      <meta name="theme-color" content="#44b880">
+      <link rel="apple-touch-icon" href="/blog/assets/icon-192x192.png?v=63f27459c3">
+      <link rel="preload" href="/blog/assets/dist/app.min.js?v=63f27459c3" as="script">
+      <link rel="preload" href="/blog/assets/dist/app.min.css?v=63f27459c3" as="style">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+      <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&amp;family=IBM+Plex+Sans+Condensed:wght@600&amp;display=swap" rel="stylesheet">
+      <link rel="preload stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700;1,800&amp;display=swap" as="font" onload="this.onload=null;this.rel='stylesheet'">
+      <link rel="preload stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" as="font" onload="this.onload=null;this.rel='stylesheet'">
+      <noscript>
+         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700;1,800&display=swap">
+         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+      </noscript>
+      <script type="text/javascript" async="" src="js/array.js"></script>
+      <script>
+         // ===============
+         // Basic Config
+         // ===============
+         let config = {
+           ghost_url: ``,  
+           ghost_key: ``,
+           ghost_version: 'v5.0',
+           enable_search_in_content: !!``,
+           color_scheme_default: `System`,
+           enable_progress_bar: !!`true`,
+           enable_image_lightbox: !!`true`,
+           enable_scroll_top: !!`true`,
+           open_links_in_new_tab: !!``,
+           enable_hyphens: false, /* Enable hyphens */
+           enable_pwa: false, /* Enable PWA - Progressive Web App */
+           disqus_shortname: 'biron-demo', /* Replace 'biron-demo' with your disqus account shortname */
+         }
+         
+         // =========================
+         // Dark/Light Theme Handling
+         // =========================
+         let preferredTheme; 
+         if (config.color_scheme_default.toLowerCase() === 'system') {
+           const preferredColorScheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+           preferredTheme = localStorage.getItem('USER_COLOR_SCHEME') || preferredColorScheme;
+         } else {
+           preferredTheme = localStorage.getItem('USER_COLOR_SCHEME') || config.color_scheme_default.toLowerCase();
+         }
+         document.documentElement.setAttribute("data-color-scheme", preferredTheme);
+         
+         // =========================
+         // Set Hyphens property
+         // =========================
+         const root = document.documentElement;
+         if (config.enable_hyphens) {
+           root.style.setProperty('--global-hyphens', 'auto')
+         }
+         
+         // ===============================
+         // Global values used in the theme
+         // ===============================
+         const global = {
+           pagination_current_page: parseInt(``),
+           pagination_next_page: parseInt(``),
+           pagination_next_page_link: '',
+           pagination_max_pages: parseInt(''), 
+           pagination_posts_per_page: parseInt('10'),
+         }
+      </script>
+      <style> 
+         body { 
+         --color-secondary: #f9d400;  
+         } 
+      </style>
+      <link rel="stylesheet" type="text/css" href="css/app.min.css">
+      <meta name="referrer" content="no-referrer-when-downgrade">
+      <meta property="og:site_name" content="Dead Simple Chat Blog">
+      <meta property="og:type" content="article">
+      <meta property="og:title" content="React Toastify : The complete guide.">
+      <meta property="og:description" content="In this guide we will start with the basics for creating toast notification and step by step move on to creating complex notifications and exploring the full capabilities of the React Toastify library Here is the run up on what we are going to learn in this article What are">
+      <meta property="og:image" content="images/react-toastify-1.png">
+      <meta property="article:published_time" content="2023-04-13T14:51:38.000Z">
+      <meta property="article:modified_time" content="2023-12-29T15:37:13.000Z">
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="React Toastify : The complete guide.">
+      <meta name="twitter:description" content="In this guide we will start with the basics for creating toast notification and step by step move on to creating complex notifications and exploring the full capabilities of the React Toastify library Here is the run up on what we are going to learn in this article What are">
+      <meta name="twitter:label1" content="Written by">
+      <meta name="twitter:data1" content="Dead Simple Chat Team">
+      <meta property="og:image:width" content="598">
+      <meta property="og:image:height" content="357">
+      <meta name="generator" content="Ghost 4.48">
+      <link rel="stylesheet" type="text/css" href="css/cards.min.css">
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-V48WSXM8JQ"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         
+         gtag('config', 'G-V48WSXM8JQ');
+      </script>
+      <!-- Google tag (gtag.js) -->
+      <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-T4H4YR734G"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         
+         gtag('config', 'G-T4H4YR734G');
+      </script>
+      <style>:root {--ghost-accent-color: #44b880;}</style>
+   </head>
+   <body class="post-template">
+      <main class="main">
+         <div class="container-fluid wrapper">
+            <article class="post post-access-public has-toc">
+               <div class="post__content js-toc-content">
+                  <p id="scroll-to-top">In this guide we will start with the basics for creating toast notification and step by step move on to creating complex notifications and exploring the full capabilities of the React Toastify library</p>
+                  <p>Here is the run up on what we are going to learn in this article</p>
+                  <ol style="padding: 0px 20px;">
+                     <li><a href="#what-are-toast-notifications">What are Toast Notifications?</a></li>
+                     <li><a href="#what-is-react-toastify">What is react Toastify?</a></li>
+                     <li><a href="#installing-react-toastify">Installing react Toastify</a></li>
+                     <li><a href="#creating-a-basic-toast-notification">Creating a basic toast notification</a></li>
+                     <li><a href="#types-of-toast-notifications">Types of Toast Messages</a></li>
+                     <li><a href="#setting-the-toast-notification-position">Setting the Toast Message Position</a></li>
+                     <li><a href="#custom-styling-the-notification-with-html-and-css">Custom Styling with HTML and CSS of Toast Messages</a></li>
+                     <li><a href="#passing-css-classes-to-components">Passing CSS classes to components</a></li>
+                     <li><a href="#using-transitions-and-animation">Using transitions and animation</a></li>
+                  </ol>
+                  <h2 id="what-are-toast-notifications">What are Toast Notifications?</h2>
+                  <p>Toast or Toastify notifications are pop-up messages that come up with some information generally on the side bar. This could be information like success, loading, error or caution. </p>
+                  <p>There could also be a progress bar or not. there are a variety of Toast Notifications available. Refer to below images for an example:</p>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/toast-notification-example.png" class="kg-image" alt="" loading="lazy" width="530" height="489">
+                     <figcaption>Toast Notification Example</figcaption>
+                  </figure>
+                  <h2 id="what-is-react-toastify">What is react toastify?</h2>
+                  <p>React toastify is one of the most popular libraries out there for creating toast notification in react.</p>
+                  <p>With react toastify you can easily create toast notifications and alerts in your react application</p>
+                  <h2 id="installing-react-toastify">Installing React Toastify</h2>
+                  <p>To install the react toastify, first you need a react application. You can easily add to your react application or if you are learning you can create a new react application with <code>create-react-app</code> </p>
+                  <p>Then, in your react application you can install react toastify by:</p>
+                  <pre><code class="language-bash">npm install --save react-toastify</code></pre>
+                  <p>with yarn</p>
+                  <pre><code class="language-bash">yarn add react-toastify</code></pre>
+                  <h2 id="creating-a-basic-toast-notification">Creating a basic toast notification</h2>
+                  <p>Creating a basic toast notification is easy. In your <code>App.Js</code> file import react toastify and the react-toastify CSS like:</p>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-javascript">import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';</code></pre>
+                     <figcaption>import react toastify</figcaption>
+                  </figure>
+                  <p>then in your <code>App()</code> function just create a notification </p>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-javascript">function App(){
+const notify = () =&gt; toast("This is a toast notification !");
+return (
+<div>
+<button onclick="{notify}">Notify !</button>
+<toastcontainer>
+</toastcontainer></div>
+)
+}</code></pre>
+                     <figcaption>toast notification</figcaption>
+                  </figure>
+                  <p>Now, we have learned how to create basic toast notifications. Let us now learn about some of the properties of toast notifications, styling characteristics and the types of toast notifications available</p>
+                  <h2 id="types-of-toast-notifications">Types of toast notifications</h2>
+                  <p>There are 5 predefined types of toast notifications available in the react toastify</p>
+                  <p>these are:</p>
+                  <ol>
+                     <li><strong>Default</strong></li>
+                     <li><strong>info</strong></li>
+                     <li><strong>success</strong></li>
+                     <li><strong>warning</strong></li>
+                     <li><strong>error</strong> </li>
+                  </ol>
+                  <p>This is how these 5 types look like and how you can implement each of the type below:</p>
+                  <p>Just call the Toast Emitter with the type you want to implement</p>
+                  <h3 id="default">Default</h3>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/default-notification.png" class="kg-image" alt="" loading="lazy" width="530" height="299">
+                     <figcaption>default notification</figcaption>
+                  </figure>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-javascript">const notify = () =&gt; toast("This is a toast notification !");</code></pre>
+                     <figcaption>default toast</figcaption>
+                  </figure>
+                  <p>This is the default, so no need to call anything here. The complete function looks like this:</p>
+                  <pre><code class="language-javascript">function Toastify(){
+const notify = () =&gt; toast.error("This is a toast notification !");
+return (
+<div>
+<button onclick="{notify}">Notify !</button>
+<toastcontainer>
+</toastcontainer></div>
+)</code></pre>
+                  <h3 id="info">Info</h3>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/toast-info-notification.png" class="kg-image" alt="" loading="lazy" width="572" height="297">
+                     <figcaption>info notification react toastofy</figcaption>
+                  </figure>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-javascript"> const notify = () =&gt; toast.info("This is a toast notification !");</code></pre>
+                     <figcaption>toast.info</figcaption>
+                  </figure>
+                  <p>The complete function looks like</p>
+                  <pre><code class="language-javascript">function Toastify(){
+const notify = () =&gt; toast.info("This is a toast notification !");
+return (
+<div>
+<button onclick="{notify}">Notify !</button>
+<toastcontainer>
+</toastcontainer></div>
+)
+}</code></pre>
+                  <h3 id="success">Success</h3>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/success-toastofy-notification.png" class="kg-image" alt="" loading="lazy" width="582" height="280">
+                     <figcaption>success toast notification</figcaption>
+                  </figure>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-javascript">const notify = () =&gt; toast.success("This is a toast notification !");</code></pre>
+                     <figcaption>success toast notification</figcaption>
+                  </figure>
+                  <p>the complete function looks</p>
+                  <pre><code class="language-javascript">function Toastify(){
+const notify = () =&gt; toast.success("This is a toast notification !");
+return (
+<div>
+<button onclick="{notify}">Notify !</button>
+<toastcontainer>
+</toastcontainer></div>
+)
+}
+</code></pre>
+                  <h3 id="warning">Warning</h3>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/toast-warning-notification.png" class="kg-image" alt="" loading="lazy" width="561" height="216">
+                     <figcaption>Warning toast notification</figcaption>
+                  </figure>
+                  <pre><code class="language-javascript">const notify = () =&gt; toast.warning("This is a toast notification !");
+</code></pre>
+                  <pre><code class="language-javascript">function Toastify(){
+const notify = () =&gt; toast.warning("This is a toast notification !");
+return (
+<div>
+<button onclick="{notify}">Notify !</button>
+<toastcontainer>
+</toastcontainer></div>
+)
+}</code></pre>
+                  <h3 id="error">Error</h3>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/error-toast-notification.png" class="kg-image" alt="" loading="lazy" width="513" height="253">
+                     <figcaption>Error toast notification</figcaption>
+                  </figure>
+                  <pre><code class="language-javascript">const notify = () =&gt; toast.error("This is a toast notification !");</code></pre>
+                  <pre><code class="language-javascript">function Toastify(){
+const notify = () =&gt; toast.error("This is a toast notification !");
+return (
+<div>
+<button onclick="{notify}">Notify !</button>
+<toastcontainer>
+</toastcontainer></div>
+)
+}</code></pre>
+                  <p></p>
+                  <h2 id="setting-the-toast-notification-position">Setting the Toast Notification position</h2>
+                  <p>You can set the Toast notification position from a variety of pre set positions available in the react toastify library</p>
+                  <p>the available positions are:</p>
+                  <ol>
+                     <li><strong>top-left</strong></li>
+                     <li><strong>top-right</strong></li>
+                     <li><strong>top-center</strong></li>
+                     <li><strong>bottom-left</strong></li>
+                     <li><strong>bottom-right</strong></li>
+                     <li><strong>bottom-center</strong></li>
+                  </ol>
+                  <p>Here is how the positional notification looks like in each of the position and the code to implement the position</p>
+                  <p>To add the position setting you need to edit the <code>ToastContainer</code> and set the position property like</p>
+                  <pre><code class="language-javascript"><toastcontainer position="top-right"></toastcontainer></code></pre>
+                  <p>In our example you can set it like</p>
+                  <pre><code>
+                    &lt;ToastContainer
+                      position="top-right"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      theme="light"
+                      transition: Bounce,
+                      /&gt;
+                  </code></pre>
+                  <pre><code class="language-javascript">function Toastify(){
+const notify = () =&gt; toast.error("This is a toast notification !");
+return (
+<div>
+<button onclick="{notify}">Notify !</button>
+<toastcontainer position="top-right">
+</toastcontainer></div>
+)
+}</code></pre>
+                  <h4 id="top-left">top-left</h4>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/top-left-notification.png" class="kg-image" alt="" loading="lazy" width="1007" height="511" srcset="images/top-left-notification_2.png 600w, images/top-left-notification_1.png 1000w, images/top-left-notification.png 1007w" sizes="(min-width: 720px) 720px">
+                     <figcaption>Top left notification toastify library</figcaption>
+                  </figure>
+                  <h4 id="top-right">top-right</h4>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/top-right-notification.png" class="kg-image" alt="" loading="lazy" width="1008" height="517" srcset="images/top-right-notification_1.png 600w, images/top-right-notification_2.png 1000w, images/top-right-notification.png 1008w" sizes="(min-width: 720px) 720px">
+                     <figcaption>top right notification react toastify library</figcaption>
+                  </figure>
+                  <h4 id="top-center">top-center</h4>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/top-center-notification.png" class="kg-image" alt="" loading="lazy" width="1007" height="512" srcset="images/top-center-notification_1.png 600w, images/top-center-notification_2.png 1000w, images/top-center-notification.png 1007w" sizes="(min-width: 720px) 720px">
+                     <figcaption>top-center notification react toastify library</figcaption>
+                  </figure>
+                  <h4 id="bottom-left">bottom left</h4>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/bottom-left-notification.png" class="kg-image" alt="" loading="lazy" width="1006" height="520" srcset="images/bottom-left-notification_1.png 600w, images/bottom-left-notification_2.png 1000w, images/bottom-left-notification.png 1006w" sizes="(min-width: 720px) 720px">
+                     <figcaption>bottom left notification react toastify</figcaption>
+                  </figure>
+                  <h4 id="bottom-right">bottom-right</h4>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/bottom-right-notification.png" class="kg-image" alt="" loading="lazy" width="1010" height="517" srcset="images/bottom-right-notification_1.png 600w, images/bottom-right-notification_2.png 1000w, images/bottom-right-notification.png 1010w" sizes="(min-width: 720px) 720px">
+                     <figcaption>bottom right notification react toastify</figcaption>
+                  </figure>
+                  <h4 id="bottom-center">bottom-center</h4>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/bottom-center-notification.png" class="kg-image" alt="" loading="lazy" width="1005" height="517" srcset="images/bottom-center-notification_2.png 600w, images/bottom-center-notification_1.png 1000w, images/bottom-center-notification.png 1005w" sizes="(min-width: 720px) 720px">
+                     <figcaption>bottom center notification react toastify</figcaption>
+                  </figure>
+                  <p></p>
+                  <h2 id="custom-styling-the-notification-with-html-and-css">Custom Styling the notification with HTML and CSS</h2>
+                  <p>You can custom style the toast notification with HTML and CSS, here is how you can customize the notification</p>
+                  <p>There are bunch of CSS variables that are exposed by the react toastify library. You can override them and do customization that most will work for most people.</p>
+                  <p>Here are the variables that you can override:</p>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-css">:root {
+--toastify-color-light: #fff;
+--toastify-color-dark: #121212;
+--toastify-color-info: #3498db;
+--toastify-color-success: #07bc0c;
+--toastify-color-warning: #f1c40f;
+--toastify-color-error: #e74c3c;
+--toastify-color-transparent: rgba(255, 255, 255, 0.7);
+
+--toastify-icon-color-info: var(--toastify-color-info);
+--toastify-icon-color-success: var(--toastify-color-success);
+--toastify-icon-color-warning: var(--toastify-color-warning);
+--toastify-icon-color-error: var(--toastify-color-error);
+
+--toastify-toast-width: 320px;
+--toastify-toast-background: #fff;
+--toastify-toast-min-height: 64px;
+--toastify-toast-max-height: 800px;
+--toastify-font-family: sans-serif;
+--toastify-z-index: 9999;
+
+--toastify-text-color-light: #757575;
+--toastify-text-color-dark: #fff;
+
+//Used only for colored theme
+--toastify-text-color-info: #fff;
+--toastify-text-color-success: #fff;
+--toastify-text-color-warning: #fff;
+--toastify-text-color-error: #fff;
+
+--toastify-spinner-color: #616161;
+--toastify-spinner-color-empty-area: #e0e0e0;
+
+// Used when no type is provided
+// toast("**hello**")
+--toastify-color-progress-light: linear-gradient(
+to right,
+#4cd964,
+#5ac8fa,
+#007aff,
+#34aadc,
+#5856d6,
+#ff2d55
+);
+// Used when no type is provided
+--toastify-color-progress-dark: #bb86fc;
+--toastify-color-progress-info: var(--toastify-color-info);
+--toastify-color-progress-success: var(--toastify-color-success);
+--toastify-color-progress-warning: var(--toastify-color-warning);
+--toastify-color-progress-error: var(--toastify-color-error);
+}</code></pre>
+                     <figcaption>CSS variables you can easily modify | React Toastify library</figcaption>
+                  </figure>
+                  <p>If changing variables is not enough for you. You can override existing class. Here are the classes that you can easily override</p>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-css">/** Used to define container behavior: width, position: fixed etc... **/
+.Toastify__toast-container {
+}
+
+/** Used to define the position of the ToastContainer **/
+.Toastify__toast-container--top-left {
+}
+.Toastify__toast-container--top-center {
+}
+.Toastify__toast-container--top-right {
+}
+.Toastify__toast-container--bottom-left {
+}
+.Toastify__toast-container--bottom-center {
+}
+.Toastify__toast-container--bottom-right {
+}
+
+/** Classes for the displayed toast **/
+.Toastify__toast {
+}
+.Toastify__toast--rtl {
+}
+.Toastify__toast-body {
+}
+
+/** Used to position the icon **/
+.Toastify__toast-icon {
+}
+
+/** handle the notification color and the text color based on the theme **/
+.Toastify__toast-theme--dark {
+}
+.Toastify__toast-theme--light {
+}
+.Toastify__toast-theme--colored.Toastify__toast--default {
+}
+.Toastify__toast-theme--colored.Toastify__toast--info {
+}
+.Toastify__toast-theme--colored.Toastify__toast--success {
+}
+.Toastify__toast-theme--colored.Toastify__toast--warning {
+}
+.Toastify__toast-theme--colored.Toastify__toast--error {
+}
+
+.Toastify__progress-bar {
+}
+.Toastify__progress-bar--rtl {
+}
+.Toastify__progress-bar-theme--light {
+}
+.Toastify__progress-bar-theme--dark {
+}
+.Toastify__progress-bar--info {
+}
+.Toastify__progress-bar--success {
+}
+.Toastify__progress-bar--warning {
+}
+.Toastify__progress-bar--error {
+}
+/** colored notifications share the same progress bar color **/
+.Toastify__progress-bar-theme--colored.Toastify__progress-bar--info,
+.Toastify__progress-bar-theme--colored.Toastify__progress-bar--success,
+.Toastify__progress-bar-theme--colored.Toastify__progress-bar--warning,
+.Toastify__progress-bar-theme--colored.Toastify__progress-bar--error {
+}
+
+/** Classes for the close button. Better use your own closeButton **/
+.Toastify__close-button {
+}
+.Toastify__close-button--default {
+}
+.Toastify__close-button &gt; svg {
+}
+.Toastify__close-button:hover,
+.Toastify__close-button:focus {
+}</code></pre>
+                     <figcaption>CSS Classes you can esily modify | React Toastify library</figcaption>
+                  </figure>
+                  <p>you can also build your own style using the scss file. Just edit the scss directory and build your own stylesheet.</p>
+                  <p>If you just want to change some colors and stuff like that you can easily do that by changing some variables</p>
+                  <p>variables are defined in the <code>__variables.scss</code> file </p>
+                  <figure class="kg-card kg-image-card kg-card-hascaption">
+                     <img src="images/tech-files.png" class="kg-image" alt="" loading="lazy" width="367" height="490">
+                     <figcaption>files to change to customize the chat</figcaption>
+                  </figure>
+                  <h2 id="passing-css-classes-to-components">Passing CSS classes to components</h2>
+                  <p>The ToastContainer will accept the following props for styling,</p>
+                  <ol>
+                     <li><strong>className</strong></li>
+                     <li><strong>toastClassName</strong></li>
+                     <li><strong>bodyClassName</strong></li>
+                     <li><strong>progressClassName</strong></li>
+                     <li><strong>style</strong></li>
+                  </ol>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-javascript">toast("Custom style", {
+className: "black-background",
+bodyClassName: "grow-font-size",
+progressClassName: "fancy-progress-bar",
+});</code></pre>
+                     <figcaption>styling the css components</figcaption>
+                  </figure>
+                  <p>This is how you can customize the toast notification</p>
+                  <h2 id="using-transitions-and-animation">Using transitions and animation</h2>
+                  <p>When it comes to animation there are millions of ways you can animate the toast notification. �&nbsp;</p>
+                  <p>m and of course you can create your custom animations as well</p>
+                  <p>The four available transitions are:</p>
+                  <ol>
+                     <li><strong>bounce</strong></li>
+                     <li><strong>slide</strong></li>
+                     <li><strong>zoom </strong></li>
+                     <li><strong>flip</strong></li>
+                  </ol>
+                  <p>You can use one of the default transitions like</p>
+                  <p>to add a default transition import the transitions from react-toastify and then in the <code>ToastContainer</code> add the transition like shown above.</p>
+                  <p>You can also implement the transition per toast as well, so you can have different transition for different toasts </p>
+                  <p>Instead of the <code>ToastContainer</code> add the transition setting in the toast function</p>
+                  <figure class="kg-card kg-code-card">
+                     <pre><code class="language-javascript">import { Bounce, Slide, Zoom, ToastContainer, toast } from 'react-toastify';    
+const notify = () =&gt; toast.success("This is a toast notification !");
+
+<toastcontainer transition="{Zoom}">
+</toastcontainer></code></pre>
+                  </figure>
+               </div>
+               <figcaption>Implementing default transitions in react-toastify</figcaption>
+               <figure class="kg-card kg-code-card">
+                  <pre><code class="language-javascript">function Toastify(){
+const notify = () =&gt; toast.success("This is a toast notification !",{
+transition: Slide
+});
+
+return (
+<div>
+
+<button onclick="{notify}">Notify !</button>
+
+<toastcontainer>
+</toastcontainer></div>
+)
+}</code></pre>
+                  <figcaption>specifing transition per toast</figcaption>
+               </figure>
+               <p>For custom transition, create the custom transition and import it in your <code>App.js</code> file then in the ToastContainer or the toast function use it as you use the default transition. like</p>
+               <figure class="kg-card kg-code-card">
+                  <pre><code class="language-javascript">import { Bounce, Slide, Zoom, ToastContainer, toast } from 'react-toastify';    
+const notify = () =&gt; toast.success("This is a toast notification !");
+
+<toastcontainer transition="{yourCustomTransition}">
+</toastcontainer></code></pre>
+               </figure>
+            </article>
+         </div>
+      </main>
+      <a href="#scroll-to-top" style="position: fixed; bottom: 10px; left: 10px; color: black; padding: 10px 15px; background-color: rgba(46, 45, 45, 0.067);">^</a>
+      <svg class="wave-gradient" version="1.1">
+         <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+               <stop offset="0%" stop-color="var(--color-primary)"></stop>
+               <stop offset="100%" stop-color="var(--color-secondary)"></stop>
+            </linearGradient>
+         </defs>
+      </svg>
+      <script>
+         if (config.enable_pwa && 'serviceWorker' in navigator) {
+           window.addEventListener('load', () => {
+             navigator.serviceWorker.register('/sw.js');
+           });
+         }
+      </script>
+   </body>
+</html>
