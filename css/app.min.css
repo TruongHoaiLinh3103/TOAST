@@ -5940,7 +5940,7 @@ var {
 
 .kg-gallery-card,
 .kg-image-card {
-	max-width: 100vw
+	width: 100vw
 }
 
 @media only screen and (min-width:36em) {
@@ -6023,8 +6023,8 @@ var {
 .kg-image-card img {
 	display: block;
 	height: auto;
-	margin: 0 auto;
-	max-width: 100%
+	max-width: 100%;
+	width: 100%;
 }
 
 .kg-gallery-container {
